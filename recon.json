@@ -1,0 +1,225 @@
+{
+  "out/IAaveOracle.sol/IAaveOracle.json": {
+    "enabled": true,
+    "functions": [
+      {
+        "signature": "setReserveSource(uint256,address)",
+        "actor": "actor",
+        "mode": "normal"
+      }
+    ],
+    "separated": true
+  },
+  "out/IHub.sol/IHub.json": {
+    "enabled": true,
+    "functions": [
+      {
+        "signature": "add(uint256,uint256)",
+        "actor": "actor",
+        "mode": "normal"
+      },
+      {
+        "signature": "addAsset(address,uint8,address,address,bytes)",
+        "actor": "actor",
+        "mode": "normal"
+      },
+      {
+        "signature": "addSpoke(uint256,address,tuple)",
+        "actor": "actor",
+        "mode": "normal"
+      },
+      {
+        "signature": "draw(uint256,uint256,address)",
+        "actor": "actor",
+        "mode": "normal"
+      },
+      {
+        "signature": "eliminateDeficit(uint256,uint256,address)",
+        "actor": "actor",
+        "mode": "normal"
+      },
+      {
+        "signature": "mintFeeShares(uint256)",
+        "actor": "actor",
+        "mode": "normal"
+      },
+      {
+        "signature": "payFeeShares(uint256,uint256)",
+        "actor": "actor",
+        "mode": "normal"
+      },
+      {
+        "signature": "reclaim(uint256,uint256)",
+        "actor": "actor",
+        "mode": "normal"
+      },
+      {
+        "signature": "refreshPremium(uint256,tuple)",
+        "actor": "actor",
+        "mode": "normal"
+      },
+      {
+        "signature": "remove(uint256,uint256,address)",
+        "actor": "actor",
+        "mode": "normal"
+      },
+      {
+        "signature": "reportDeficit(uint256,uint256,tuple)",
+        "actor": "actor",
+        "mode": "normal"
+      },
+      {
+        "signature": "restore(uint256,uint256,tuple)",
+        "actor": "actor",
+        "mode": "normal"
+      },
+      {
+        "signature": "setAuthority(address)",
+        "actor": "actor",
+        "mode": "normal"
+      },
+      {
+        "signature": "setInterestRateData(uint256,bytes)",
+        "actor": "actor",
+        "mode": "normal"
+      },
+      {
+        "signature": "sweep(uint256,uint256)",
+        "actor": "actor",
+        "mode": "normal"
+      },
+      {
+        "signature": "transferShares(uint256,uint256,address)",
+        "actor": "actor",
+        "mode": "normal"
+      },
+      {
+        "signature": "updateAssetConfig(uint256,tuple,bytes)",
+        "actor": "actor",
+        "mode": "normal"
+      },
+      {
+        "signature": "updateSpokeConfig(uint256,address,tuple)",
+        "actor": "actor",
+        "mode": "normal"
+      }
+    ],
+    "separated": true
+  },
+  "out/ISpoke.sol/ISpoke.json": {
+    "enabled": true,
+    "functions": [
+      {
+        "signature": "addDynamicReserveConfig(uint256,tuple)",
+        "actor": "actor",
+        "mode": "normal"
+      },
+      {
+        "signature": "addReserve(address,uint256,address,tuple,tuple)",
+        "actor": "actor",
+        "mode": "normal"
+      },
+      {
+        "signature": "borrow(uint256,uint256,address)",
+        "actor": "actor",
+        "mode": "normal"
+      },
+      {
+        "signature": "liquidationCall(uint256,uint256,address,uint256,bool)",
+        "actor": "actor",
+        "mode": "normal"
+      },
+      {
+        "signature": "multicall(bytes[])",
+        "actor": "actor",
+        "mode": "normal"
+      },
+      {
+        "signature": "permitReserve(uint256,address,uint256,uint256,uint8,bytes32,bytes32)",
+        "actor": "actor",
+        "mode": "normal"
+      },
+      {
+        "signature": "renouncePositionManagerRole(address)",
+        "actor": "actor",
+        "mode": "normal"
+      },
+      {
+        "signature": "repay(uint256,uint256,address)",
+        "actor": "actor",
+        "mode": "normal"
+      },
+      {
+        "signature": "setAuthority(address)",
+        "actor": "actor",
+        "mode": "normal"
+      },
+      {
+        "signature": "setUserPositionManager(address,bool)",
+        "actor": "actor",
+        "mode": "normal"
+      },
+      {
+        "signature": "setUserPositionManagerWithSig(address,address,bool,uint256,uint256,bytes)",
+        "actor": "actor",
+        "mode": "normal"
+      },
+      {
+        "signature": "setUsingAsCollateral(uint256,bool,address)",
+        "actor": "actor",
+        "mode": "normal"
+      },
+      {
+        "signature": "supply(uint256,uint256,address)",
+        "actor": "actor",
+        "mode": "normal"
+      },
+      {
+        "signature": "updateDynamicReserveConfig(uint256,uint24,tuple)",
+        "actor": "actor",
+        "mode": "normal"
+      },
+      {
+        "signature": "updateLiquidationConfig(tuple)",
+        "actor": "actor",
+        "mode": "normal"
+      },
+      {
+        "signature": "updatePositionManager(address,bool)",
+        "actor": "actor",
+        "mode": "normal"
+      },
+      {
+        "signature": "updateReserveConfig(uint256,tuple)",
+        "actor": "actor",
+        "mode": "normal"
+      },
+      {
+        "signature": "updateReservePriceSource(uint256,address)",
+        "actor": "actor",
+        "mode": "normal"
+      },
+      {
+        "signature": "updateUserDynamicConfig(address)",
+        "actor": "actor",
+        "mode": "normal"
+      },
+      {
+        "signature": "updateUserRiskPremium(address)",
+        "actor": "actor",
+        "mode": "normal"
+      },
+      {
+        "signature": "useNonce(uint192)",
+        "actor": "actor",
+        "mode": "normal"
+      },
+      {
+        "signature": "withdraw(uint256,uint256,address)",
+        "actor": "actor",
+        "mode": "normal"
+      }
+    ],
+    "separated": true
+  }
+}
