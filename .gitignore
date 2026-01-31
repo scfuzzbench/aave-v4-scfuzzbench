@@ -28,3 +28,5 @@ report/
 crytic-export
 echidna
 medusa
+corpus/
+slither_results.json

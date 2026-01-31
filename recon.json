@@ -176,12 +176,12 @@
       },
       {
         "signature": "updateDynamicReserveConfig(uint256,uint24,tuple)",
-        "actor": "actor",
+        "actor": "admin",
         "mode": "normal"
       },
       {
         "signature": "updateLiquidationConfig(tuple)",
-        "actor": "actor",
+        "actor": "admin",
         "mode": "normal"
       },
       {
@@ -191,7 +191,7 @@
       },
       {
         "signature": "updateReserveConfig(uint256,tuple)",
-        "actor": "actor",
+        "actor": "admin",
         "mode": "normal"
       },
       {

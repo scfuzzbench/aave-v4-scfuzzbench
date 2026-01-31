@@ -300,6 +300,7 @@ abstract contract Base is Test {
     manager.grantRole(Roles.SPOKE_ADMIN_ROLE, ADMIN, 0);
     manager.grantRole(Roles.SPOKE_ADMIN_ROLE, SPOKE_ADMIN, 0);
 
+    manager.grantRole(Roles.USER_POSITION_UPDATER_ROLE, ADMIN, 0);
     manager.grantRole(Roles.USER_POSITION_UPDATER_ROLE, SPOKE_ADMIN, 0);
     manager.grantRole(Roles.USER_POSITION_UPDATER_ROLE, USER_POSITION_UPDATER, 0);
 
@@ -387,7 +388,10 @@ abstract contract Base is Test {
       tokenList.wbtc.mint(users[x], mintAmount_WBTC);
       tokenList.usdy.mint(users[x], mintAmount_USDY);
       tokenList.usdz.mint(users[x], mintAmount_USDZ);
-      deal(address(tokenList.weth), users[x], mintAmount_WETH);
+      // deal(address(tokenList.weth), users[x], mintAmount_WETH);
+      vm.deal(address(this), mintAmount_WETH);
+      tokenList.weth.deposit{value: mintAmount_WETH}();
+      tokenList.weth.transfer(users[x], mintAmount_WETH);
 
       vm.startPrank(users[x]);
       for (uint256 y; y < spokes.length; ++y) {
@@ -2226,22 +2230,25 @@ abstract contract Base is Test {
     address proxyAdminOwner,
     address _accessManager,
     string memory _oracleDesc
-  ) internal pausePrank returns (ISpoke, IAaveOracle) {
+  ) internal returns (ISpoke, IAaveOracle) {
     address deployer = makeAddr('deployer');
-    address predictedSpoke = vm.computeCreateAddress(deployer, vm.getNonce(deployer));
-    IAaveOracle oracle = new AaveOracle(predictedSpoke, 8, _oracleDesc);
-    address spokeImpl = address(new SpokeInstance(address(oracle)));
+    // address predictedSpoke = vm.computeCreateAddress(deployer, vm.getNonce(deployer));
+    IAaveOracle oracle = new AaveOracle(address(1), 8, _oracleDesc);
+    SpokeInstance spokeImpl = new SpokeInstance(address(oracle));
+    spokeImpl.initialize(_accessManager);
     ISpoke spoke = ISpoke(
-      _proxify(
-        deployer,
-        spokeImpl,
-        proxyAdminOwner,
-        abi.encodeCall(Spoke.initialize, (_accessManager))
-      )
+      spokeImpl
+      // _proxify(
+      //   deployer,
+      //   spokeImpl,
+      //   proxyAdminOwner,
+      //   abi.encodeCall(Spoke.initialize, (_accessManager))
+      // )
     );
-    assertEq(address(spoke), predictedSpoke, 'predictedSpoke');
-    assertEq(spoke.ORACLE(), address(oracle));
-    assertEq(oracle.SPOKE(), address(spoke));
+    AaveOracle(address(oracle)).setSpoke(address(spoke));
+    // assertEq(address(spoke), predictedSpoke, 'predictedSpoke');
+    _assertEq(spoke.ORACLE(), address(oracle));
+    _assertEq(oracle.SPOKE(), address(spoke));
     return (spoke, oracle);
   }
 
@@ -2336,6 +2343,19 @@ abstract contract Base is Test {
     assertEq(a.variableRateSlope1, b.variableRateSlope1, 'variableRateSlope1');
     assertEq(a.variableRateSlope2, b.variableRateSlope2, 'variableRateSlope2');
     assertEq(abi.encode(a), abi.encode(b));
+  }
+
+  function _assertEq(address a, address b, string memory errorMessage) internal pure {
+    if (a != b) {
+      console.log('a', a);
+      console.log('b', b);
+      console.log('errorMessage', errorMessage);
+    }
+    require(a == b, errorMessage);
+  }
+
+  function _assertEq(address a, address b) internal pure {
+    _assertEq(a, b, "address mismatch");
   }
 
   function _calculateExpectedFees(

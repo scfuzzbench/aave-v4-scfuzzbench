@@ -1,11 +1,11 @@
 {
   "fuzzing": {
-    "workers": 16,
+    "workers": 32,
     "workerResetLimit": 50,
     "timeout": 0,
     "testLimit": 0,
     "callSequenceLength": 100,
-    "corpusDirectory": "medusa",
+    "corpusDirectory": "corpus/medusa",
     "coverageEnabled": true,
     "deploymentOrder": [
 
@@ -17,7 +17,7 @@
       "0x27b46536c66c8e3000000"
     ],
     "predeployedContracts": {
-      "CryticTester": "0x7FA9385bE102ac3EAc297483Dd6233D62b3e1496"
+      "CryticTester": "0x7FA9385bE102ac3EAc297483Dd6233D62b3e1496","EIP712Types": "0x10","Roles": "0x11","MathUtils": "0x12","WadRayMath": "0x13","PercentageMath": "0x14","EIP712Hash": "0x15","KeyValueList": "0x16","LiquidationLogic": "0x17","UserPositionDebt": "0x18","PositionStatusMap": "0x19","ReserveFlagsMap": "0x1a","SharesMath": "0x1b","AssetLogic": "0x1c","Premium": "0x1d"
     },
     "constructorArgs": {},
     "deployerAddress": "0xf5e4fFeB7d2183B61753AA4074d72E51873C1D0a",
@@ -55,7 +55,7 @@
       "propertyTesting": {
         "enabled": true,
         "testPrefixes": [
-          "echidna_"
+          "invariant_"
         ]
       },
       "optimizationTesting": {
@@ -83,18 +83,16 @@
   "compilation": {
     "platform": "crytic-compile",
     "platformConfig": {
-      "target": ".",
+      "target": "tests/recon/CryticTester.sol",
       "solcVersion": "",
       "exportDirectory": "",
-      "args": [
-        "--foundry-compile-all"
-      ]
+      "args": ["--compile-libraries=(EIP712Types,0x10),(Roles,0x11),(MathUtils,0x12),(WadRayMath,0x13),(PercentageMath,0x14),(EIP712Hash,0x15),(KeyValueList,0x16),(LiquidationLogic,0x17),(UserPositionDebt,0x18),(PositionStatusMap,0x19),(ReserveFlagsMap,0x1a),(SharesMath,0x1b),(AssetLogic,0x1c),(Premium,0x1d)"]
     }
   },
   "slither": {
 		"useSlither": true,
 		"cachePath": "slither_results.json",
-		"args": []
+    "args": ["--compile-libraries=(EIP712Types,0x10),(Roles,0x11),(MathUtils,0x12),(WadRayMath,0x13),(PercentageMath,0x14),(EIP712Hash,0x15),(KeyValueList,0x16),(LiquidationLogic,0x17),(UserPositionDebt,0x18),(PositionStatusMap,0x19),(ReserveFlagsMap,0x1a),(SharesMath,0x1b),(AssetLogic,0x1c),(Premium,0x1d)"]
 	},
   "logging": {
     "level": "info",

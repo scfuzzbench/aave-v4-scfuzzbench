@@ -63,3 +63,13 @@ zkevm = { key = "${ETHERSCAN_API_KEY_ZKEVM}", chainId = 1101 }
 gnosis = { key = "${ETHERSCAN_API_KEY_GNOSIS}", chainId = 100 }
 bnb = { key = "${ETHERSCAN_API_KEY_BNB}", chainId = 56 }
 celo = { key = "${ETHERSCAN_API_KEY_CELO}", chainId = 42220 }
+
+[invariant]
+runs = 500000000
+depth = 100
+# shrink_run_limit = 100000
+include_storage = true
+show_solidity = true
+show_metrics = true
+fail_on_revert = false
+corpus_dir = "corpus/foundry"

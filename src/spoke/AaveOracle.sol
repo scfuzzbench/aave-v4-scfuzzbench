@@ -11,7 +11,7 @@ import {IAaveOracle, IPriceOracle} from 'src/spoke/interfaces/IAaveOracle.sol';
 /// @dev Oracles are spoke-specific, due to the usage of reserve id as index of the `_sources` mapping.
 contract AaveOracle is IAaveOracle {
   /// @inheritdoc IPriceOracle
-  address public immutable SPOKE;
+  address public SPOKE;
 
   /// @inheritdoc IPriceOracle
   uint8 public immutable DECIMALS;
@@ -31,6 +31,11 @@ contract AaveOracle is IAaveOracle {
     SPOKE = spoke_;
     DECIMALS = decimals_;
     DESCRIPTION = description_;
+  }
+
+  // @audit FIXME: This is a hack to set the spoke after the oracle is deployed so that it does not rely on vm.computeCreateAddress.
+  function setSpoke(address spoke) external {
+    SPOKE = spoke;
   }
 
   /// @inheritdoc IAaveOracle
