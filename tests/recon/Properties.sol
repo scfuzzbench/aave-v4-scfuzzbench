@@ -42,7 +42,7 @@ abstract contract Properties is BeforeAfter, Asserts {
 
     /// @notice Invariant 1: Total borrowed assets <= total supplied assets (v2)
     /// @dev Uses definition provided by the protocol team with auditors fix
-    function invariant_totalBorrowedLessThanSupplied_v2() internal returns (bool) {
+    function invariant_totalBorrowedLessThanSupplied_v2() public returns (bool) {
         uint256 assetCount = iHub.getAssetCount();
 
         for (uint256 i = 0; i < assetCount; i++) {
@@ -58,7 +58,7 @@ abstract contract Properties is BeforeAfter, Asserts {
     }
 
     /// @notice Invariant 2: Total borrowed shares == sum of Spoke debt shares
-    function invariant_totalBorrowedSharesMatchesSpokeSum() internal returns (bool) {
+    function invariant_totalBorrowedSharesMatchesSpokeSum() public returns (bool) {
         uint256 assetCount = iHub.getAssetCount();
 
         for (uint256 i = 0; i < assetCount; i++) {
@@ -80,7 +80,7 @@ abstract contract Properties is BeforeAfter, Asserts {
     }
 
     /// @notice Invariant 3: Hub added assets >= sum of Spoke added assets (converted from shares)
-    function invariant_hubAddedAssetsGreaterThanSpokeSum() internal returns (bool) {
+    function invariant_hubAddedAssetsGreaterThanSpokeSum() public returns (bool) {
         uint256 assetCount = iHub.getAssetCount();
 
         for (uint256 i = 0; i < assetCount; i++) {
@@ -103,7 +103,7 @@ abstract contract Properties is BeforeAfter, Asserts {
     }
 
     /// @notice Invariant 4: Hub added shares == sum of Spoke added shares
-    function invariant_hubAddedSharesMatchesSpokeSum() internal returns (bool) {
+    function invariant_hubAddedSharesMatchesSpokeSum() public returns (bool) {
         uint256 assetCount = iHub.getAssetCount();
 
         for (uint256 i = 0; i < assetCount; i++) {
@@ -125,7 +125,7 @@ abstract contract Properties is BeforeAfter, Asserts {
     }
 
     /// @notice Invariant 5: Supply share price and drawn index cannot decrease
-    function invariant_supplySharePriceAndDrawnIndexMonotonic() internal returns (bool) {
+    function invariant_supplySharePriceAndDrawnIndexMonotonic() public returns (bool) {
         uint256 assetCount = iHub.getAssetCount();
 
         for (uint256 i = 0; i < assetCount; i++) {
@@ -158,7 +158,7 @@ abstract contract Properties is BeforeAfter, Asserts {
         return true;
     }
 
-    function invariant_shouldNotBecomeLiquidatable() internal returns (bool) {
+    function invariant_shouldNotBecomeLiquidatable() public returns (bool) {
         if (_after.operation == Operation.SetPrice) {
             return true;
         }

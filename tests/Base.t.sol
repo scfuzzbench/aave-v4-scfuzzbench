@@ -168,6 +168,8 @@ abstract contract Base is Test {
 
   Decimals internal _decimals = Decimals({usdx: 6, usdy: 18, dai: 18, wbtc: 8, weth: 18, usdz: 18});
 
+  bool internal deployed = false;
+
   struct Decimals {
     uint8 usdx;
     uint8 dai;
@@ -272,6 +274,8 @@ abstract contract Base is Test {
   }
 
   function deployFixtures() internal virtual {
+    if (deployed) return;
+
     vm.startPrank(ADMIN);
     accessManager = IAccessManager(address(new AccessManagerEnumerable(ADMIN)));
     hub1 = new Hub(address(accessManager));
@@ -289,6 +293,8 @@ abstract contract Base is Test {
     setUpRoles(hub1, spoke1, accessManager);
     setUpRoles(hub1, spoke2, accessManager);
     setUpRoles(hub1, spoke3, accessManager);
+
+    deployed = true; 
   }
 
   function setUpRoles(IHub targetHub, ISpoke spoke, IAccessManager manager) internal virtual {
