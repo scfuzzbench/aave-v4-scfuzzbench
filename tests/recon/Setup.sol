@@ -10,14 +10,16 @@ import {ActorManager} from "@recon/ActorManager.sol";
 import {AssetManager} from "@recon/AssetManager.sol";
 
 // Helpers
-import {Utils} from "@recon/Utils.sol";
+import {Utils as ReconUtils} from "@recon/Utils.sol";
 
 // Your deps
 import "src/spoke/interfaces/IAaveOracle.sol";
 import "src/hub/interfaces/IHub.sol";
 import "src/spoke/interfaces/ISpoke.sol";
 
-abstract contract Setup is BaseSetup, ActorManager, AssetManager, Utils {
+import "tests/Base.t.sol";
+
+abstract contract Setup is BaseSetup, ActorManager, AssetManager, ReconUtils, Base {
     IAaveOracle iAaveOracle;
     IHub iHub;
     ISpoke iSpoke;
@@ -25,9 +27,12 @@ abstract contract Setup is BaseSetup, ActorManager, AssetManager, Utils {
     /// === Setup === ///
     /// This contains all calls to be performed in the tester constructor, both for Echidna and Foundry
     function setup() internal virtual override {
-        iAaveOracle = new IAaveOracle(); // TODO: Add parameters here
-        iHub = new IHub(); // TODO: Add parameters here
-        iSpoke = new ISpoke(); // TODO: Add parameters here
+        deployFixtures();
+        initEnvironment();
+
+        iAaveOracle = oracle1;
+        iHub = hub1;
+        iSpoke = spoke1;
     }
 
     /// === MODIFIERS === ///
