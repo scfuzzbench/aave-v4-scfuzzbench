@@ -12,6 +12,8 @@ import {Panic} from "@recon/Panic.sol";
 
 import "src/spoke/interfaces/IAaveOracle.sol";
 import "src/dependencies/chainlink/AggregatorV3Interface.sol";
+import "src/spoke/AaveOracle.sol";
+import "tests/mocks/MockPriceFeed.sol";
 
 abstract contract IAaveOracleTargets is
     BaseTargetFunctions,
@@ -29,25 +31,29 @@ abstract contract IAaveOracleTargets is
         iAaveOracle.setReserveSource(reserveId, source);
     }
 
-    function iAaveOracle_setPrice(uint256 reserveId, uint256 price) public asActor {
+    function iAaveOracle_setPrice(uint256 reserveId, uint256 price) public asAdmin {
         uint256 reserveCount = iSpoke.getReserveCount();
         require(reserveCount > 0);
 
         reserveId = between(reserveId, 0, reserveCount - 1);
 
-        uint256 basePrice = _getBasePrice(reserveId);
+        uint256 basePrice = _getOriginalPrice(reserveId);
 
         price = between(price, basePrice / MAX_PRICE_CHANGE_FACTOR, basePrice * MAX_PRICE_CHANGE_FACTOR);
-        _mockReservePrice(iSpoke, reserveId, price);
+        AaveOracle oracle = AaveOracle(iSpoke.ORACLE());
+        address mockPriceFeed = address(
+            new MockPriceFeed(oracle.DECIMALS(), oracle.DESCRIPTION(), price)
+        );
+        iSpoke.updateReservePriceSource(reserveId, mockPriceFeed);
         _after.operation = Operation.SetPrice;
     }
 
-    function _getBasePrice(uint256 reserveId) private returns (uint256 basePrice) {
-        basePrice = _originalPrices[reserveId];
-        if (basePrice == 0) {
+    function _getOriginalPrice(uint256 reserveId) private returns (uint256 originalPrice) {
+        originalPrice = _originalPrices[reserveId];
+        if (originalPrice == 0) {
             (, int256 answer,,,) = AggregatorV3Interface(iAaveOracle.getReserveSource(reserveId)).latestRoundData();
-            basePrice = uint256(answer);
-            _originalPrices[reserveId] = basePrice;
+            originalPrice = uint256(answer);
+            _originalPrices[reserveId] = originalPrice;
         }
     }
 }

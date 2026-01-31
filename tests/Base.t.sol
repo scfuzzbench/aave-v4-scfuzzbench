@@ -2233,11 +2233,11 @@ abstract contract Base is Test {
   }
 
   function _deploySpokeWithOracle(
-    address proxyAdminOwner,
+    address /*proxyAdminOwner*/,
     address _accessManager,
     string memory _oracleDesc
   ) internal returns (ISpoke, IAaveOracle) {
-    address deployer = makeAddr('deployer');
+    // address deployer = makeAddr('deployer');
     // address predictedSpoke = vm.computeCreateAddress(deployer, vm.getNonce(deployer));
     IAaveOracle oracle = new AaveOracle(address(1), 8, _oracleDesc);
     SpokeInstance spokeImpl = new SpokeInstance(address(oracle));

@@ -206,7 +206,7 @@ abstract contract ISpokeTargets is
 
         reserveId = between(reserveId, 0, reserveCount - 1);
 
-        uint24 dynamicConfigKey = uint24(between(dynamicConfigKey, 0, uint256(iSpoke.getReserve(reserveId).dynamicConfigKey)));
+        dynamicConfigKey = uint24(between(dynamicConfigKey, 0, uint256(iSpoke.getReserve(reserveId).dynamicConfigKey)));
         iSpoke.updateDynamicReserveConfig(reserveId, dynamicConfigKey, dynamicConfig);
     }
 
