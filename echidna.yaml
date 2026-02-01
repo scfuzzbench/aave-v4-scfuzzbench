@@ -10,4 +10,3 @@ cryticArgs: ["--compile-libraries=(EIP712Types,0x10),(Roles,0x11),(MathUtils,0x1
 deployContracts: [["0x10", "EIP712Types"],["0x11", "Roles"],["0x12", "MathUtils"],["0x13", "WadRayMath"],["0x14", "PercentageMath"],["0x15", "EIP712Hash"],["0x16", "KeyValueList"],["0x17", "LiquidationLogic"],["0x18", "UserPositionDebt"],["0x19", "PositionStatusMap"],["0x1a", "ReserveFlagsMap"],["0x1b", "SharesMath"],["0x1c", "AssetLogic"],["0x1d", "Premium"]]
 deployer: "0x1804c8AB1F12E6bbf3894d4083f33e07309d1f38"
 contractAddr: "0x7FA9385bE102ac3EAc297483Dd6233D62b3e1496"
-shrinkLimit: 100000
