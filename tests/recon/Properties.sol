@@ -5,6 +5,12 @@ import {Asserts} from "@chimera/Asserts.sol";
 import {BeforeAfter} from "./BeforeAfter.sol";
 
 abstract contract Properties is BeforeAfter, Asserts {
+    string constant ASSERTION_LIQUIDATION_CALL_DOS = "!!! iSpoke_liquidationCall DoS";
+    string constant ASSERTION_REPAY_DOS = "!!! iSpoke_repay DoS";
+    string constant ASSERTION_SUPPLY_DOS = "!!! iSpoke_supply DoS";
+    string constant ASSERTION_WITHDRAW_DOS = "!!! iSpoke_withdraw DoS";
+    string constant ASSERTION_MINT_FEE_SHARES_PPS_CHANGE = "!!! iHub_mintFeeShares PPS change";
+
     /// @notice Invariant 1: Total borrowed assets <= total supplied assets (v0)
     /// @dev Uses definition assumed by the auditors
     function invariant_totalBorrowedLessThanSupplied_v0() public returns (bool) {

@@ -19,10 +19,12 @@ abstract contract ManagersTargets is
     // == ACTOR HANDLERS == //
     
     /// @dev Start acting as another actor
+    /// @dev Skip address(this) as it is not seeded by Setup
+    /// @dev Separate ADMIN from regular users to discard 'admin is trusted' scenarios
     function switchActor(uint256 entropy) public {
         uint256 actorCount = _getActors().length;
-        require(actorCount > 0);
-        entropy = between(entropy, 0, actorCount - 1);
+        require(actorCount > 1);
+        entropy = between(entropy, 1, actorCount - 1);
         _switchActor(entropy);
     }
 

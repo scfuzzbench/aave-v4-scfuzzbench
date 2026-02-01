@@ -90,7 +90,7 @@ abstract contract ISpokeTargets is
               || bytes4(err) == IHub.SpokePaused.selector
               || (bytes4(err) == IHub.InsufficientLiquidity.selector && !receiveShares)
               || bytes4(err) == IAaveOracle.InvalidPrice.selector
-              , "iSpoke_liquidationCall: DoS");
+              , ASSERTION_LIQUIDATION_CALL_DOS);
             require(false);
         }
     }
@@ -137,7 +137,7 @@ abstract contract ISpokeTargets is
               || bytes4(err) == IHub.SurplusDrawnRestored.selector
               || bytes4(err) == IHub.SurplusPremiumRayRestored.selector
               || bytes4(err) == IAaveOracle.InvalidPrice.selector
-              , "iSpoke_repay: DoS");
+              , ASSERTION_REPAY_DOS);
             require(false);
         }
     }
@@ -195,7 +195,7 @@ abstract contract ISpokeTargets is
               || bytes4(err) == IHub.SpokeNotActive.selector
               || bytes4(err) == IHub.AddCapExceeded.selector
               || bytes4(err) == IHub.SpokePaused.selector
-              , "iSpoke_supply: DoS");
+              , ASSERTION_SUPPLY_DOS);
             require(false);
         }
     }
@@ -277,7 +277,7 @@ abstract contract ISpokeTargets is
               || bytes4(err) == IHub.InsufficientLiquidity.selector
               || bytes4(err) == ISpoke.HealthFactorBelowThreshold.selector
               || bytes4(err) == Ownable.OwnableUnauthorizedAccount.selector
-              , "iSpoke_withdraw: DoS");
+              , ASSERTION_WITHDRAW_DOS);
             require(false);
         }
     }

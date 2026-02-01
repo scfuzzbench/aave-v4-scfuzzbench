@@ -12,18 +12,22 @@ import {TargetFunctions} from "./TargetFunctions.sol";
 
 // forge test --match-contract CryticToFoundry -vv
 contract CryticToFoundry is Test, TargetFunctions, FoundryAsserts {
-    bool private assertionFailure = false;
+    mapping(string => bool) private assertionFailures;
 
     function setUp() public override {
         setup();
-        assertionFailure = false;
 
         targetContract(address(this));
+        targetSender(address(0x10000));
+        targetSender(address(0x20000));
+        targetSender(address(0x30000));
     }
 
-    // forge test --match-test test_crytic -vvv
-    function test_crytic() public {
-        // TODO: add failing property tests here for debugging
+    function _isAssertion(string memory reason) internal pure returns (bool) {
+        return bytes(reason).length >= 3 &&
+            bytes(reason)[0] == '!' &&
+            bytes(reason)[1] == '!' &&
+            bytes(reason)[2] == '!';
     }
 
     function gt(uint256 a, uint256 b, string memory reason)
@@ -31,7 +35,12 @@ contract CryticToFoundry is Test, TargetFunctions, FoundryAsserts {
         virtual
         override(FoundryAsserts, Asserts)
     {
-        _recordAssertion(a > b, reason);
+        if(_isAssertion(reason)) {
+            _recordAssertion(a > b, reason);
+        }
+        else {
+            super.gt(a, b, reason);
+        }
     }
 
     function gte(uint256 a, uint256 b, string memory reason)
@@ -39,7 +48,12 @@ contract CryticToFoundry is Test, TargetFunctions, FoundryAsserts {
         virtual
         override(FoundryAsserts, Asserts)
     {
-        _recordAssertion(a >= b, reason);
+        if(_isAssertion(reason)) {
+            _recordAssertion(a >= b, reason);
+        }
+        else {
+            super.gte(a, b, reason);
+        }
     }
 
     function lt(uint256 a, uint256 b, string memory reason)
@@ -47,7 +61,12 @@ contract CryticToFoundry is Test, TargetFunctions, FoundryAsserts {
         virtual
         override(FoundryAsserts, Asserts)
     {
-        _recordAssertion(a < b, reason);
+        if(_isAssertion(reason)) {
+            _recordAssertion(a < b, reason);
+        }
+        else {
+            super.lt(a, b, reason);
+        }
     }
 
     function lte(uint256 a, uint256 b, string memory reason)
@@ -55,7 +74,12 @@ contract CryticToFoundry is Test, TargetFunctions, FoundryAsserts {
         virtual
         override(FoundryAsserts, Asserts)
     {
-        _recordAssertion(a <= b, reason);
+        if(_isAssertion(reason)) {
+            _recordAssertion(a <= b, reason);
+        }
+        else {
+            super.lte(a, b, reason);
+        }
     }
 
     function eq(uint256 a, uint256 b, string memory reason)
@@ -63,7 +87,12 @@ contract CryticToFoundry is Test, TargetFunctions, FoundryAsserts {
         virtual
         override(FoundryAsserts, Asserts)
     {
-        _recordAssertion(a == b, reason);
+        if(_isAssertion(reason)) {
+            _recordAssertion(a == b, reason);
+        }
+        else {
+            super.eq(a, b, reason);
+        }
     }
 
     function t(bool b, string memory reason)
@@ -71,45 +100,12 @@ contract CryticToFoundry is Test, TargetFunctions, FoundryAsserts {
         virtual
         override(FoundryAsserts, Asserts)
     {
-        _recordAssertion(b, reason);
-    }
-
-    function between(uint256 value, uint256 low, uint256 high)
-        internal
-        virtual
-        override(FoundryAsserts, Asserts)
-        returns (uint256)
-    {
-        if (value < low || value > high) {
-            uint256 ans = low + (value % (high - low + 1));
-            return ans;
+        if(_isAssertion(reason)) {
+            _recordAssertion(b, reason);
         }
-        return value;
-    }
-
-    function between(int256 value, int256 low, int256 high)
-        internal
-        virtual
-        override(FoundryAsserts, Asserts)
-        returns (int256)
-    {
-        if (value < low || value > high) {
-            int256 range = high - low + 1;
-            int256 clamped = (value - low) % (range);
-            if (clamped < 0) clamped += range;
-            int256 ans = low + clamped;
-            return ans;
+        else {
+            super.t(b, reason);
         }
-        return value;
-    }
-
-    function invariant_assertionFailure() public returns (bool) {
-        if (assertionFailure) {
-            // Mark test failure without reverting so the invariant runner detects it.
-            fail();
-            return false;
-        }
-        return true;
     }
 
     function _recordAssertion(bool ok, string memory reason) internal {
@@ -117,11 +113,30 @@ contract CryticToFoundry is Test, TargetFunctions, FoundryAsserts {
             return;
         }
 
-        assertionFailure = true;
+        assertionFailures[reason] = true;
+    }
 
-        if (bytes(reason).length != 0) {
-            emit log(reason);
-        }
+    function invariant_assertion_failure_WITHDRAW_DOS() public view {
+        assertTrue(!assertionFailures[ASSERTION_WITHDRAW_DOS], ASSERTION_WITHDRAW_DOS);
+    }
+
+    function invariant_assertion_failure_LIQUIDATION_CALL_DOS() public view {
+        assertTrue(!assertionFailures[ASSERTION_LIQUIDATION_CALL_DOS], ASSERTION_LIQUIDATION_CALL_DOS);
+    }
+
+    function invariant_assertion_failure_REPAY_DOS() public view {
+        assertTrue(!assertionFailures[ASSERTION_REPAY_DOS], ASSERTION_REPAY_DOS);
+    }
+
+    function invariant_assertion_failure_SUPPLY_DOS() public view {
+        assertTrue(!assertionFailures[ASSERTION_SUPPLY_DOS], ASSERTION_SUPPLY_DOS);
+    }
+
+    function invariant_assertion_failure_MINT_FEE_SHARES_PPS_CHANGE() public view {
+        assertTrue(!assertionFailures[ASSERTION_MINT_FEE_SHARES_PPS_CHANGE], ASSERTION_MINT_FEE_SHARES_PPS_CHANGE);
+    }
+
+    function invariant_noop() public view {
 
     }
 }

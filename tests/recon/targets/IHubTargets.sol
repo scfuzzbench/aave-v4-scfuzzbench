@@ -54,7 +54,7 @@ abstract contract IHubTargets is
         uint256 diff = oldPPS > newPPS ? oldPPS - newPPS : newPPS - oldPPS;
         uint256 relativeDiff = (diff * 1e18) / oldPPS;
 
-        lte(relativeDiff, 1, string.concat("PPS ", oldPPS > newPPS ? "decreased" : "increased"));
+        lte(relativeDiff, 1, ASSERTION_MINT_FEE_SHARES_PPS_CHANGE);
     }
 
     function _pps(uint256 assetId) private view returns (uint256) {
