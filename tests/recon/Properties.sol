@@ -21,7 +21,7 @@ abstract contract Properties is BeforeAfter, Asserts {
     string constant ASSERTION_SUPPLY_DOS = "!!! iSpoke_supply DoS";
     string constant ASSERTION_WITHDRAW_DOS = "!!! iSpoke_withdraw DoS";
     string constant ASSERTION_MINT_FEE_SHARES_PPS_CHANGE = "!!! iHub_mintFeeShares PPS change";
-    string constant ASSERTION_CANARY_ASSERTION_FAILURE = "!!! CANARY_ASSERTION_FAILURE";
+    string constant ASSERTION_CANARY_ASSERTION_FAILURE = "!!! canary assertion";
 
     /// @dev Avoids invalidated issues by only implementing pre-vetted list of Audit Contest invariants 
     /// @dev Reference https://audits.sherlock.xyz/contests/1209
@@ -35,7 +35,7 @@ abstract contract Properties is BeforeAfter, Asserts {
 
     /// @dev Add extra 'Holy grail' property
     string constant INVARIANT_HOLY_GRAIL_SHOULD_NOT_BECOME_LIQUIDATABLE = "Holy grail: Users should not become liquidatable except by price change";
-    string constant INVARIANT_CANARY_GLOBAL_INVARIANT_FAILURE = "CANARY_GLOBAL_INVARIANT_FAILURE";
+    string constant INVARIANT_CANARY_GLOBAL_INVARIANT_FAILURE = "Canary invariant";
 
     function _relativeDiff(int256 diff, uint256 denom) internal pure returns (int256) {
         if (denom == 0) {
@@ -290,7 +290,7 @@ abstract contract Properties is BeforeAfter, Asserts {
     }
 
     /// @dev Canary global invariant expected to fail immediately.
-    function invariant_canary_global_invariant_failure() public returns (bool) {
+    function invariant_canary() public returns (bool) {
         int256 maxViolation = PERCENT;
         if (!OPTIMIZATION_MODE) {
             t(maxViolation <= 0, INVARIANT_CANARY_GLOBAL_INVARIANT_FAILURE);
