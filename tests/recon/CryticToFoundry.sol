@@ -21,6 +21,9 @@ contract CryticToFoundry is Test, TargetFunctions, FoundryAsserts {
         targetSender(address(0x10000));
         targetSender(address(0x20000));
         targetSender(address(0x30000));
+
+        // Canary: force one assertion-failure invariant to fail immediately.
+        _recordAssertion(false, ASSERTION_CANARY_ASSERTION_FAILURE);
     }
 
     function _isAssertion(string memory reason) internal pure returns (bool) {
@@ -134,6 +137,10 @@ contract CryticToFoundry is Test, TargetFunctions, FoundryAsserts {
 
     function invariant_assertion_failure_MINT_FEE_SHARES_PPS_CHANGE() public view {
         assertTrue(!assertionFailures[ASSERTION_MINT_FEE_SHARES_PPS_CHANGE], ASSERTION_MINT_FEE_SHARES_PPS_CHANGE);
+    }
+
+    function invariant_assertion_failure_CANARY_ASSERTION_FAILURE() public view {
+        assertTrue(!assertionFailures[ASSERTION_CANARY_ASSERTION_FAILURE], ASSERTION_CANARY_ASSERTION_FAILURE);
     }
 
     function invariant_noop() public view {
