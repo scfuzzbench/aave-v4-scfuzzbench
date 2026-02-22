@@ -21,7 +21,7 @@ abstract contract Properties is BeforeAfter, Asserts {
     string constant ASSERTION_SUPPLY_DOS = "!!! iSpoke_supply DoS";
     string constant ASSERTION_WITHDRAW_DOS = "!!! iSpoke_withdraw DoS";
     string constant ASSERTION_MINT_FEE_SHARES_PPS_CHANGE = "!!! iHub_mintFeeShares PPS change";
-    string constant ASSERTION_CANARY_ASSERTION_FAILURE = "!!! canary assertion";
+    string constant ASSERTION_CANARY = "!!! canary assertion";
 
     /// @dev Avoids invalidated issues by only implementing pre-vetted list of Audit Contest invariants 
     /// @dev Reference https://audits.sherlock.xyz/contests/1209
@@ -282,7 +282,7 @@ abstract contract Properties is BeforeAfter, Asserts {
 
     /// @dev Canary assertion helper. A failing input is expected to be discovered during fuzzing.
     function assert_canary(uint256 entropy) public {
-        t(entropy > 0, ASSERTION_CANARY_ASSERTION_FAILURE);
+        t(entropy > 0, ASSERTION_CANARY);
     }
 
     /// @dev Canary global invariant expected to fail immediately.
