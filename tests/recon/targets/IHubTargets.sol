@@ -13,12 +13,8 @@ import {Panic} from "@recon/Panic.sol";
 import "src/hub/interfaces/IHub.sol";
 import "src/hub/interfaces/IAssetInterestRateStrategy.sol";
 
-abstract contract IHubTargets is
-    BaseTargetFunctions,
-    Properties
-{
+abstract contract IHubTargets is BaseTargetFunctions, Properties {
     /// CUSTOM TARGET FUNCTIONS - Add your own target functions here ///
-
 
     /// AUTO GENERATED TARGET FUNCTIONS - WARNING: DO NOT DELETE OR MODIFY THIS LINE ///
 
@@ -26,7 +22,13 @@ abstract contract IHubTargets is
         iHub.add(assetId, amount);
     }
 
-    function iHub_addAsset(address underlying, uint8 decimals, address feeReceiver, address irStrategy, bytes memory irData) private asActor {
+    function iHub_addAsset(
+        address underlying,
+        uint8 decimals,
+        address feeReceiver,
+        address irStrategy,
+        bytes memory irData
+    ) private asActor {
         iHub.addAsset(underlying, decimals, feeReceiver, irStrategy, irData);
     }
 
@@ -42,7 +44,7 @@ abstract contract IHubTargets is
         iHub.eliminateDeficit(assetId, amount, spoke);
     }
 
-    function iHub_mintFeeShares(uint256 assetId) public asAdmin {
+    function iHub_mintFeeShares_ASSERTION_MINT_FEE_SHARES_PPS_CHANGE(uint256 assetId) public asAdmin {
         uint256 assetCount = iHub.getAssetCount();
         require(assetCount > 0);
 
@@ -77,15 +79,21 @@ abstract contract IHubTargets is
         iHub.remove(assetId, amount, to);
     }
 
-    function iHub_reportDeficit(uint256 assetId, uint256 drawnAmount, IHubBase.PremiumDelta memory premiumDelta) private asActor {
+    function iHub_reportDeficit(uint256 assetId, uint256 drawnAmount, IHubBase.PremiumDelta memory premiumDelta)
+        private
+        asActor
+    {
         iHub.reportDeficit(assetId, drawnAmount, premiumDelta);
     }
 
-    function iHub_restore(uint256 assetId, uint256 drawnAmount, IHubBase.PremiumDelta memory premiumDelta) private asActor {
+    function iHub_restore(uint256 assetId, uint256 drawnAmount, IHubBase.PremiumDelta memory premiumDelta)
+        private
+        asActor
+    {
         iHub.restore(assetId, drawnAmount, premiumDelta);
     }
 
-    function iHub_setAuthority(address ) private asActor {
+    function iHub_setAuthority(address) private asActor {
         iHub.setAuthority(address(0));
     }
 
@@ -93,7 +101,10 @@ abstract contract IHubTargets is
         iHub.setInterestRateData(assetId, irData);
     }
 
-    function iHub_setInterestRateData(uint256 assetId, IAssetInterestRateStrategy.InterestRateData memory irData) public asAdmin {
+    function iHub_setInterestRateData(uint256 assetId, IAssetInterestRateStrategy.InterestRateData memory irData)
+        public
+        asAdmin
+    {
         uint256 assetCount = iHub.getAssetCount();
         require(assetCount > 0);
 
@@ -109,11 +120,18 @@ abstract contract IHubTargets is
         iHub.transferShares(assetId, shares, toSpoke);
     }
 
-    function iHub_updateAssetConfig(uint256 assetId, IHub.AssetConfig memory config, bytes memory irData) private asActor {
+    function iHub_updateAssetConfig(uint256 assetId, IHub.AssetConfig memory config, bytes memory irData)
+        private
+        asActor
+    {
         iHub.updateAssetConfig(assetId, config, irData);
     }
 
-    function iHub_updateAssetConfig(uint256 assetId, IHub.AssetConfig memory config, IAssetInterestRateStrategy.InterestRateData memory irData) public asAdmin {
+    function iHub_updateAssetConfig(
+        uint256 assetId,
+        IHub.AssetConfig memory config,
+        IAssetInterestRateStrategy.InterestRateData memory irData
+    ) public asAdmin {
         uint256 assetCount = iHub.getAssetCount();
         require(assetCount > 0);
 

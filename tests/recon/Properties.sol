@@ -23,18 +23,26 @@ abstract contract Properties is BeforeAfter, Asserts {
     string constant ASSERTION_MINT_FEE_SHARES_PPS_CHANGE = "!!! iHub_mintFeeShares PPS change";
     string constant ASSERTION_CANARY = "!!! canary assertion";
 
-    /// @dev Avoids invalidated issues by only implementing pre-vetted list of Audit Contest invariants 
+    /// @dev Avoids invalidated issues by only implementing pre-vetted list of Audit Contest invariants
     /// @dev Reference https://audits.sherlock.xyz/contests/1209
-    string constant INVARIANT_1_TOTAL_BORROWED_LESS_THAN_SUPPLIED_V0 = "Invariant 1: Total borrowed assets <= total supplied assets (v0)";
-    string constant INVARIANT_1_TOTAL_BORROWED_LESS_THAN_SUPPLIED_V1 = "Invariant 1: Total borrowed assets <= total supplied assets (v1)";
-    string constant INVARIANT_1_TOTAL_BORROWED_LESS_THAN_SUPPLIED_V2 = "Invariant 1: Total borrowed assets <= total supplied assets (v2)";
-    string constant INVARIANT_2_TOTAL_BORROWED_SHARES_MATCHES_SPOKE_SUM = "Invariant 2: Total borrowed shares == sum of Spoke debt shares";
-    string constant INVARIANT_3_HUB_ADDED_ASSETS_GREATER_THAN_SPOKE_SUM = "Invariant 3: Hub added assets >= sum of Spoke added assets (converted from shares)";
-    string constant INVARIANT_4_HUB_ADDED_SHARES_MATCHES_SPOKE_SUM = "Invariant 4: Hub added shares == sum of Spoke added shares";
-    string constant INVARIANT_5_SUPPLY_SHARE_PRICE_AND_DRAWN_INDEX_MONOTONIC = "Invariant 5: Supply share price and drawn index cannot decrease";
+    string constant INVARIANT_1_TOTAL_BORROWED_LESS_THAN_SUPPLIED_V0 =
+        "Invariant 1: Total borrowed assets <= total supplied assets (v0)";
+    string constant INVARIANT_1_TOTAL_BORROWED_LESS_THAN_SUPPLIED_V1 =
+        "Invariant 1: Total borrowed assets <= total supplied assets (v1)";
+    string constant INVARIANT_1_TOTAL_BORROWED_LESS_THAN_SUPPLIED_V2 =
+        "Invariant 1: Total borrowed assets <= total supplied assets (v2)";
+    string constant INVARIANT_2_TOTAL_BORROWED_SHARES_MATCHES_SPOKE_SUM =
+        "Invariant 2: Total borrowed shares == sum of Spoke debt shares";
+    string constant INVARIANT_3_HUB_ADDED_ASSETS_GREATER_THAN_SPOKE_SUM =
+        "Invariant 3: Hub added assets >= sum of Spoke added assets (converted from shares)";
+    string constant INVARIANT_4_HUB_ADDED_SHARES_MATCHES_SPOKE_SUM =
+        "Invariant 4: Hub added shares == sum of Spoke added shares";
+    string constant INVARIANT_5_SUPPLY_SHARE_PRICE_AND_DRAWN_INDEX_MONOTONIC =
+        "Invariant 5: Supply share price and drawn index cannot decrease";
 
     /// @dev Add extra 'Holy grail' property
-    string constant INVARIANT_HOLY_GRAIL_SHOULD_NOT_BECOME_LIQUIDATABLE = "Holy grail: Users should not become liquidatable except by price change";
+    string constant INVARIANT_HOLY_GRAIL_SHOULD_NOT_BECOME_LIQUIDATABLE =
+        "Holy grail: Users should not become liquidatable except by price change";
     string constant INVARIANT_CANARY_GLOBAL_INVARIANT_FAILURE = "Canary invariant";
 
     function _relativeDiff(int256 diff, uint256 denom) internal pure returns (int256) {
@@ -247,9 +255,7 @@ abstract contract Properties is BeforeAfter, Asserts {
                 if (maxShares > 0) {
                     uint256 lhs = addedAssets * maxShares;
                     uint256 rhs = maxAssets * addedShares;
-                    int256 diff = lhs >= rhs
-                        ? -int256(lhs - rhs)
-                        : int256(rhs - lhs);
+                    int256 diff = lhs >= rhs ? -int256(lhs - rhs) : int256(rhs - lhs);
                     int256 relativeDiff = _relativeDiff(diff, rhs);
                     if (relativeDiff > maxViolation) {
                         maxViolation = relativeDiff;
@@ -280,9 +286,9 @@ abstract contract Properties is BeforeAfter, Asserts {
         return maxViolation <= 0;
     }
 
-    /// @dev Canary assertion helper. A failing input is expected to be discovered during fuzzing.
-    function assert_canary(uint256 entropy) public {
-        t(entropy > 0, ASSERTION_CANARY);
+    /// @dev Canary assertion helper. This fails for one eighth of random inputs.
+    function assert_canary_ASSERTION_CANARY(uint256 entropy) public {
+        t(entropy % 8 != 0, ASSERTION_CANARY);
     }
 
     /// @dev Canary global invariant expected to fail immediately.
