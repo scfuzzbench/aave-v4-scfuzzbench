@@ -18,24 +18,29 @@ import "src/dependencies/openzeppelin/IERC20Errors.sol";
 import "src/dependencies/weth/WETH9.sol";
 import "src/spoke/libraries/LiquidationLogic.sol";
 
-abstract contract ISpokeTargets is
-    BaseTargetFunctions,
-    Properties
-{
+abstract contract ISpokeTargets is BaseTargetFunctions, Properties {
     /// CUSTOM TARGET FUNCTIONS - Add your own target functions here ///
-
 
     /// AUTO GENERATED TARGET FUNCTIONS - WARNING: DO NOT DELETE OR MODIFY THIS LINE ///
 
-    function iSpoke_addDynamicReserveConfig(uint256 reserveId, ISpoke.DynamicReserveConfig memory dynamicConfig) public asAdmin {
+    function iSpoke_addDynamicReserveConfig(uint256 reserveId, ISpoke.DynamicReserveConfig memory dynamicConfig)
+        public
+        asAdmin
+    {
         uint256 reserveCount = iSpoke.getReserveCount();
         require(reserveCount > 0);
 
-        reserveId = between(reserveId, 0, reserveCount - 1);        
+        reserveId = between(reserveId, 0, reserveCount - 1);
         iSpoke.addDynamicReserveConfig(reserveId, dynamicConfig);
     }
 
-    function iSpoke_addReserve(address hub, uint256 assetId, address priceSource, ISpoke.ReserveConfig memory config, ISpoke.DynamicReserveConfig memory dynamicConfig) private asActor {
+    function iSpoke_addReserve(
+        address hub,
+        uint256 assetId,
+        address priceSource,
+        ISpoke.ReserveConfig memory config,
+        ISpoke.DynamicReserveConfig memory dynamicConfig
+    ) private asActor {
         iSpoke.addReserve(hub, assetId, priceSource, config, dynamicConfig);
     }
 
@@ -49,15 +54,27 @@ abstract contract ISpokeTargets is
 
         reserveId = between(reserveId, 0, reserveCount - 1);
         amount = between(amount, 0, _max(reserveId));
-        
+
         iSpoke.borrow(reserveId, amount, _getActor());
     }
 
-    function iSpoke_liquidationCall(uint256 collateralReserveId, uint256 debtReserveId, address user, uint256 debtToCover, bool receiveShares) private asActor {
+    function iSpoke_liquidationCall(
+        uint256 collateralReserveId,
+        uint256 debtReserveId,
+        address user,
+        uint256 debtToCover,
+        bool receiveShares
+    ) private asActor {
         iSpoke.liquidationCall(collateralReserveId, debtReserveId, user, debtToCover, receiveShares);
     }
 
-    function iSpoke_liquidationCall(uint256 collateralReserveId, uint256 debtReserveId, uint256 userId, uint256 debtToCover, bool receiveShares) public asActor {
+    function iSpoke_liquidationCall_ASSERTION_LIQUIDATION_CALL_DOS(
+        uint256 collateralReserveId,
+        uint256 debtReserveId,
+        uint256 userId,
+        uint256 debtToCover,
+        bool receiveShares
+    ) public asActor {
         uint256 reserveCount = iSpoke.getReserveCount();
         require(reserveCount > 1);
         address[] memory actors = _getActors();
@@ -69,28 +86,27 @@ abstract contract ISpokeTargets is
         userId = between(userId, 0, actors.length - 1);
         address user = actors[userId];
 
-        try iSpoke.liquidationCall(collateralReserveId, debtReserveId, user, debtToCover, receiveShares) {} catch (bytes memory err) {
-            t(bytes4(err) == ISpoke.ReserveNotListed.selector
-              || bytes4(err) == ISpoke.SelfLiquidation.selector
-              || bytes4(err) == ISpoke.InvalidDebtToCover.selector
-              || bytes4(err) == IERC20Errors.ERC20InsufficientAllowance.selector
-              || bytes4(err) == IERC20Errors.ERC20InsufficientBalance.selector
-              || bytes4(err) == WETH9.InsufficientAllowance.selector
-              || bytes4(err) == WETH9.InsufficientBalance.selector
-              || bytes4(err) == ISpoke.ReservePaused.selector
-              || bytes4(err) == ISpoke.ReserveNotSupplied.selector
-              || bytes4(err) == ISpoke.ReserveNotBorrowed.selector
-              || bytes4(err) == ISpoke.CollateralCannotBeLiquidated.selector
-              || bytes4(err) == ISpoke.HealthFactorNotBelowThreshold.selector
-              || bytes4(err) == ISpoke.ReserveNotEnabledAsCollateral.selector
-              || bytes4(err) == ISpoke.CannotReceiveShares.selector
-              || bytes4(err) == ISpoke.MustNotLeaveDust.selector
-              || bytes4(err) == IHub.InvalidAmount.selector
-              || bytes4(err) == IHub.SpokeNotActive.selector
-              || bytes4(err) == IHub.SpokePaused.selector
-              || (bytes4(err) == IHub.InsufficientLiquidity.selector && !receiveShares)
-              || bytes4(err) == IAaveOracle.InvalidPrice.selector
-              , ASSERTION_LIQUIDATION_CALL_DOS);
+        try iSpoke.liquidationCall(collateralReserveId, debtReserveId, user, debtToCover, receiveShares) {}
+        catch (bytes memory err) {
+            t(
+                bytes4(err) == ISpoke.ReserveNotListed.selector || bytes4(err) == ISpoke.SelfLiquidation.selector
+                    || bytes4(err) == ISpoke.InvalidDebtToCover.selector
+                    || bytes4(err) == IERC20Errors.ERC20InsufficientAllowance.selector
+                    || bytes4(err) == IERC20Errors.ERC20InsufficientBalance.selector
+                    || bytes4(err) == WETH9.InsufficientAllowance.selector
+                    || bytes4(err) == WETH9.InsufficientBalance.selector || bytes4(err) == ISpoke.ReservePaused.selector
+                    || bytes4(err) == ISpoke.ReserveNotSupplied.selector
+                    || bytes4(err) == ISpoke.ReserveNotBorrowed.selector
+                    || bytes4(err) == ISpoke.CollateralCannotBeLiquidated.selector
+                    || bytes4(err) == ISpoke.HealthFactorNotBelowThreshold.selector
+                    || bytes4(err) == ISpoke.ReserveNotEnabledAsCollateral.selector
+                    || bytes4(err) == ISpoke.CannotReceiveShares.selector || bytes4(err) == ISpoke.MustNotLeaveDust.selector
+                    || bytes4(err) == IHub.InvalidAmount.selector || bytes4(err) == IHub.SpokeNotActive.selector
+                    || bytes4(err) == IHub.SpokePaused.selector
+                    || (bytes4(err) == IHub.InsufficientLiquidity.selector && !receiveShares)
+                    || bytes4(err) == IAaveOracle.InvalidPrice.selector,
+                ASSERTION_LIQUIDATION_CALL_DOS
+            );
             require(false);
         }
     }
@@ -99,7 +115,15 @@ abstract contract ISpokeTargets is
         iSpoke.multicall(data);
     }
 
-    function iSpoke_permitReserve(uint256 reserveId, address onBehalfOf, uint256 value, uint256 deadline, uint8 permitV, bytes32 permitR, bytes32 permitS) private asActor {
+    function iSpoke_permitReserve(
+        uint256 reserveId,
+        address onBehalfOf,
+        uint256 value,
+        uint256 deadline,
+        uint8 permitV,
+        bytes32 permitR,
+        bytes32 permitS
+    ) private asActor {
         iSpoke.permitReserve(reserveId, onBehalfOf, value, deadline, permitV, permitR, permitS);
     }
 
@@ -111,7 +135,7 @@ abstract contract ISpokeTargets is
         iSpoke.repay(reserveId, amount, onBehalfOf);
     }
 
-    function iSpoke_repay(uint256 reserveId, uint256 amount) public asActor {
+    function iSpoke_repay_ASSERTION_REPAY_DOS(uint256 reserveId, uint256 amount) public asActor {
         uint256 reserveCount = iSpoke.getReserveCount();
         require(reserveCount > 1);
 
@@ -124,25 +148,24 @@ abstract contract ISpokeTargets is
             value0 = tempValue0;
             value1 = tempValue1;
         } catch (bytes memory err) {
-            t(bytes4(err) == ISpoke.Unauthorized.selector
-              || bytes4(err) == ISpoke.ReserveNotListed.selector
-              || bytes4(err) == ISpoke.ReservePaused.selector
-              || bytes4(err) == IERC20Errors.ERC20InsufficientAllowance.selector
-              || bytes4(err) == IERC20Errors.ERC20InsufficientBalance.selector
-              || bytes4(err) == WETH9.InsufficientAllowance.selector
-              || bytes4(err) == WETH9.InsufficientBalance.selector
-              || bytes4(err) == IHub.InvalidAmount.selector
-              || bytes4(err) == IHub.SpokeNotActive.selector
-              || bytes4(err) == IHub.SpokePaused.selector
-              || bytes4(err) == IHub.SurplusDrawnRestored.selector
-              || bytes4(err) == IHub.SurplusPremiumRayRestored.selector
-              || bytes4(err) == IAaveOracle.InvalidPrice.selector
-              , ASSERTION_REPAY_DOS);
+            t(
+                bytes4(err) == ISpoke.Unauthorized.selector || bytes4(err) == ISpoke.ReserveNotListed.selector
+                    || bytes4(err) == ISpoke.ReservePaused.selector
+                    || bytes4(err) == IERC20Errors.ERC20InsufficientAllowance.selector
+                    || bytes4(err) == IERC20Errors.ERC20InsufficientBalance.selector
+                    || bytes4(err) == WETH9.InsufficientAllowance.selector
+                    || bytes4(err) == WETH9.InsufficientBalance.selector || bytes4(err) == IHub.InvalidAmount.selector
+                    || bytes4(err) == IHub.SpokeNotActive.selector || bytes4(err) == IHub.SpokePaused.selector
+                    || bytes4(err) == IHub.SurplusDrawnRestored.selector
+                    || bytes4(err) == IHub.SurplusPremiumRayRestored.selector
+                    || bytes4(err) == IAaveOracle.InvalidPrice.selector,
+                ASSERTION_REPAY_DOS
+            );
             require(false);
         }
     }
 
-    function iSpoke_setAuthority(address ) private asActor {
+    function iSpoke_setAuthority(address) private asActor {
         iSpoke.setAuthority(address(0));
     }
 
@@ -150,11 +173,21 @@ abstract contract ISpokeTargets is
         iSpoke.setUserPositionManager(positionManager, approve);
     }
 
-    function iSpoke_setUserPositionManagerWithSig(address positionManager, address user, bool approve, uint256 nonce, uint256 deadline, bytes memory signature) private asActor {
+    function iSpoke_setUserPositionManagerWithSig(
+        address positionManager,
+        address user,
+        bool approve,
+        uint256 nonce,
+        uint256 deadline,
+        bytes memory signature
+    ) private asActor {
         iSpoke.setUserPositionManagerWithSig(positionManager, user, approve, nonce, deadline, signature);
     }
 
-    function iSpoke_setUsingAsCollateral(uint256 reserveId, bool usingAsCollateral, address onBehalfOf) private asActor {
+    function iSpoke_setUsingAsCollateral(uint256 reserveId, bool usingAsCollateral, address onBehalfOf)
+        private
+        asActor
+    {
         iSpoke.setUsingAsCollateral(reserveId, usingAsCollateral, onBehalfOf);
     }
 
@@ -170,7 +203,7 @@ abstract contract ISpokeTargets is
         iSpoke.supply(reserveId, amount, onBehalfOf);
     }
 
-    function iSpoke_supply(uint256 reserveId, uint256 amount) public asActor {
+    function iSpoke_supply_ASSERTION_SUPPLY_DOS(uint256 reserveId, uint256 amount) public asActor {
         uint256 reserveCount = iSpoke.getReserveCount();
         require(reserveCount > 1);
 
@@ -183,24 +216,26 @@ abstract contract ISpokeTargets is
             value0 = tempValue0;
             value1 = tempValue1;
         } catch (bytes memory err) {
-            t(bytes4(err) == ISpoke.ReserveNotListed.selector
-              || bytes4(err) == ISpoke.ReservePaused.selector
-              || bytes4(err) == IERC20Errors.ERC20InsufficientAllowance.selector
-              || bytes4(err) == IERC20Errors.ERC20InsufficientBalance.selector
-              || bytes4(err) == WETH9.InsufficientAllowance.selector
-              || bytes4(err) == WETH9.InsufficientBalance.selector
-              || bytes4(err) == ISpoke.ReserveFrozen.selector
-              || bytes4(err) == IHub.InvalidShares.selector
-              || bytes4(err) == IHub.InvalidAmount.selector
-              || bytes4(err) == IHub.SpokeNotActive.selector
-              || bytes4(err) == IHub.AddCapExceeded.selector
-              || bytes4(err) == IHub.SpokePaused.selector
-              , ASSERTION_SUPPLY_DOS);
+            t(
+                bytes4(err) == ISpoke.ReserveNotListed.selector || bytes4(err) == ISpoke.ReservePaused.selector
+                    || bytes4(err) == IERC20Errors.ERC20InsufficientAllowance.selector
+                    || bytes4(err) == IERC20Errors.ERC20InsufficientBalance.selector
+                    || bytes4(err) == WETH9.InsufficientAllowance.selector
+                    || bytes4(err) == WETH9.InsufficientBalance.selector || bytes4(err) == ISpoke.ReserveFrozen.selector
+                    || bytes4(err) == IHub.InvalidShares.selector || bytes4(err) == IHub.InvalidAmount.selector
+                    || bytes4(err) == IHub.SpokeNotActive.selector || bytes4(err) == IHub.AddCapExceeded.selector
+                    || bytes4(err) == IHub.SpokePaused.selector,
+                ASSERTION_SUPPLY_DOS
+            );
             require(false);
         }
     }
 
-    function iSpoke_updateDynamicReserveConfig(uint256 reserveId, uint24 dynamicConfigKey, ISpoke.DynamicReserveConfig memory dynamicConfig) public asAdmin {
+    function iSpoke_updateDynamicReserveConfig(
+        uint256 reserveId,
+        uint24 dynamicConfigKey,
+        ISpoke.DynamicReserveConfig memory dynamicConfig
+    ) public asAdmin {
         uint256 reserveCount = iSpoke.getReserveCount();
         require(reserveCount > 0);
 
@@ -254,7 +289,7 @@ abstract contract ISpokeTargets is
         iSpoke.withdraw(reserveId, amount, onBehalfOf);
     }
 
-    function iSpoke_withdraw(uint256 reserveId, uint256 amount) public asActor {
+    function iSpoke_withdraw_ASSERTION_WITHDRAW_DOS(uint256 reserveId, uint256 amount) public asActor {
         uint256 reserveCount = iSpoke.getReserveCount();
         require(reserveCount > 1);
 
@@ -267,17 +302,15 @@ abstract contract ISpokeTargets is
             value0 = tempValue0;
             value1 = tempValue1;
         } catch (bytes memory err) {
-            t(bytes4(err) == ISpoke.Unauthorized.selector
-              || bytes4(err) == ISpoke.ReserveNotListed.selector
-              || bytes4(err) == ISpoke.ReservePaused.selector
-              || bytes4(err) == IHub.InvalidAddress.selector
-              || bytes4(err) == IHub.InvalidAmount.selector
-              || bytes4(err) == IHub.SpokeNotActive.selector
-              || bytes4(err) == IHub.SpokePaused.selector
-              || bytes4(err) == IHub.InsufficientLiquidity.selector
-              || bytes4(err) == ISpoke.HealthFactorBelowThreshold.selector
-              || bytes4(err) == Ownable.OwnableUnauthorizedAccount.selector
-              , ASSERTION_WITHDRAW_DOS);
+            t(
+                bytes4(err) == ISpoke.Unauthorized.selector || bytes4(err) == ISpoke.ReserveNotListed.selector
+                    || bytes4(err) == ISpoke.ReservePaused.selector || bytes4(err) == IHub.InvalidAddress.selector
+                    || bytes4(err) == IHub.InvalidAmount.selector || bytes4(err) == IHub.SpokeNotActive.selector
+                    || bytes4(err) == IHub.SpokePaused.selector || bytes4(err) == IHub.InsufficientLiquidity.selector
+                    || bytes4(err) == ISpoke.HealthFactorBelowThreshold.selector
+                    || bytes4(err) == Ownable.OwnableUnauthorizedAccount.selector,
+                ASSERTION_WITHDRAW_DOS
+            );
             require(false);
         }
     }
