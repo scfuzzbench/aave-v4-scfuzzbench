@@ -68,13 +68,7 @@ abstract contract ISpokeTargets is BaseTargetFunctions, Properties {
         iSpoke.liquidationCall(collateralReserveId, debtReserveId, user, debtToCover, receiveShares);
     }
 
-    function iSpoke_liquidationCall_ASSERTION_LIQUIDATION_CALL_DOS(
-        uint256 collateralReserveId,
-        uint256 debtReserveId,
-        uint256 userId,
-        uint256 debtToCover,
-        bool receiveShares
-    ) public asActor {
+    function iSpoke_liquidationCall_ASSERTION_LIQUIDATION_CALL_DOS(uint256 collateralReserveId, uint256 debtReserveId, uint256 userId, uint256 debtToCover, bool receiveShares) public asActor {
         uint256 reserveCount = iSpoke.getReserveCount();
         require(reserveCount > 1);
         address[] memory actors = _getActors();

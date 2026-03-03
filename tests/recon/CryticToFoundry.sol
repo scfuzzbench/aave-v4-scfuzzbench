@@ -83,29 +83,45 @@ contract CryticToFoundry is Test, TargetFunctions, FoundryAsserts {
         assertionFailures[reason] = true;
     }
 
+<<<<<<< HEAD
     function invariant_assertion_failure_iSpoke_withdraw_ASSERTION_WITHDRAW_DOS() public view {
+=======
+    function invariant_assertion_failure_iSpoke_withdraw_ASSERTION_WITHDRAW_DOS() public returns (bool) {
+>>>>>>> bc9ca744 (test(recon): normalize assertion handler and wrapper naming)
         assertTrue(!assertionFailures[ASSERTION_WITHDRAW_DOS], ASSERTION_WITHDRAW_DOS);
+        return true;
     }
 
+<<<<<<< HEAD
     function invariant_assertion_failure_iSpoke_liquidationCall_ASSERTION_LIQUIDATION_CALL_DOS() public view {
+=======
+    function invariant_assertion_failure_iSpoke_liquidationCall_ASSERTION_LIQUIDATION_CALL_DOS() public returns (bool) {
+>>>>>>> bc9ca744 (test(recon): normalize assertion handler and wrapper naming)
         assertTrue(!assertionFailures[ASSERTION_LIQUIDATION_CALL_DOS], ASSERTION_LIQUIDATION_CALL_DOS);
+        return true;
     }
 
-    function invariant_assertion_failure_iSpoke_repay_ASSERTION_REPAY_DOS() public view {
+    function invariant_assertion_failure_iSpoke_repay_ASSERTION_REPAY_DOS() public returns (bool) {
         assertTrue(!assertionFailures[ASSERTION_REPAY_DOS], ASSERTION_REPAY_DOS);
+        return true;
     }
 
-    function invariant_assertion_failure_iSpoke_supply_ASSERTION_SUPPLY_DOS() public view {
+    function invariant_assertion_failure_iSpoke_supply_ASSERTION_SUPPLY_DOS() public returns (bool) {
         assertTrue(!assertionFailures[ASSERTION_SUPPLY_DOS], ASSERTION_SUPPLY_DOS);
+        return true;
     }
 
-    function invariant_assertion_failure_iHub_mintFeeShares_ASSERTION_MINT_FEE_SHARES_PPS_CHANGE() public view {
+    function invariant_assertion_failure_iHub_mintFeeShares_ASSERTION_MINT_FEE_SHARES_PPS_CHANGE() public returns (bool) {
         assertTrue(!assertionFailures[ASSERTION_MINT_FEE_SHARES_PPS_CHANGE], ASSERTION_MINT_FEE_SHARES_PPS_CHANGE);
+        return true;
     }
 
-    function invariant_assertion_failure_assert_canary_ASSERTION_CANARY() public view {
+    function invariant_assertion_failure_assert_canary_ASSERTION_CANARY() public returns (bool) {
         assertTrue(!assertionFailures[ASSERTION_CANARY], ASSERTION_CANARY);
+        return true;
     }
 
-    function invariant_noop() public view {}
+    function invariant_noop() public returns (bool) {
+        return true;
+    }
 }
