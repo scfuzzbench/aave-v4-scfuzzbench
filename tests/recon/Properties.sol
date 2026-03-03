@@ -286,9 +286,9 @@ abstract contract Properties is BeforeAfter, Asserts {
         return maxViolation <= 0;
     }
 
-    /// @dev Canary assertion helper. This fails for one eighth of random inputs.
+    /// @dev Canary assertion helper. A failing input is expected to be discovered during fuzzing.
     function assert_canary_ASSERTION_CANARY(uint256 entropy) public {
-        t(entropy % 8 != 0, ASSERTION_CANARY);
+        t(entropy > 0, ASSERTION_CANARY);
     }
 
     /// @dev Canary global invariant expected to fail immediately.
