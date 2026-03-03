@@ -83,20 +83,12 @@ contract CryticToFoundry is Test, TargetFunctions, FoundryAsserts {
         assertionFailures[reason] = true;
     }
 
-<<<<<<< HEAD
-    function invariant_assertion_failure_iSpoke_withdraw_ASSERTION_WITHDRAW_DOS() public view {
-=======
     function invariant_assertion_failure_iSpoke_withdraw_ASSERTION_WITHDRAW_DOS() public returns (bool) {
->>>>>>> bc9ca744 (test(recon): normalize assertion handler and wrapper naming)
         assertTrue(!assertionFailures[ASSERTION_WITHDRAW_DOS], ASSERTION_WITHDRAW_DOS);
         return true;
     }
 
-<<<<<<< HEAD
-    function invariant_assertion_failure_iSpoke_liquidationCall_ASSERTION_LIQUIDATION_CALL_DOS() public view {
-=======
     function invariant_assertion_failure_iSpoke_liquidationCall_ASSERTION_LIQUIDATION_CALL_DOS() public returns (bool) {
->>>>>>> bc9ca744 (test(recon): normalize assertion handler and wrapper naming)
         assertTrue(!assertionFailures[ASSERTION_LIQUIDATION_CALL_DOS], ASSERTION_LIQUIDATION_CALL_DOS);
         return true;
     }
