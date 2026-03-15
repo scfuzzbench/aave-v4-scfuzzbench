@@ -72,3 +72,6 @@ show_metrics = true
 fail_on_revert = false
 continuous_run = true
 corpus_dir = "corpus/foundry"
+corpus_gzip = false
+max_time_delay = 604800
+max_block_delay = 60480
