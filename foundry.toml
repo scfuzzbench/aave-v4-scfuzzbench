@@ -3,6 +3,7 @@ src = 'src'
 test = 'tests'
 out = 'out'
 libs = ['lib']
+assertions_revert = false
 fs_permissions = [{ access = "read", path = "tests/mocks/JsonBindings.sol" }]
 solc_version = "0.8.28"
 evm_version = "cancun"
@@ -70,6 +71,7 @@ include_storage = true
 show_solidity = true
 show_metrics = true
 fail_on_revert = false
+fail_on_assert = true
 continuous_run = true
 corpus_dir = "corpus/foundry"
 corpus_gzip = false
