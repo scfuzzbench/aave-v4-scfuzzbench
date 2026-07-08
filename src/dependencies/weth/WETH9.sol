@@ -28,6 +28,9 @@ contract WETH9 {
   mapping(address => uint256) public balanceOf;
   mapping(address => mapping(address => uint256)) public allowance;
 
+  error InsufficientBalance();
+  error InsufficientAllowance();
+
   receive() external payable {
     deposit();
   }
@@ -59,10 +62,10 @@ contract WETH9 {
   }
 
   function transferFrom(address src, address dst, uint256 wad) public returns (bool) {
-    require(balanceOf[src] >= wad);
+    require(balanceOf[src] >= wad, InsufficientBalance());
 
     if (src != msg.sender && allowance[src][msg.sender] != type(uint256).max) {
-      require(allowance[src][msg.sender] >= wad);
+      require(allowance[src][msg.sender] >= wad, InsufficientAllowance());
       allowance[src][msg.sender] -= wad;
     }
 

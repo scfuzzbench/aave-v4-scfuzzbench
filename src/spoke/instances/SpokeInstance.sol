@@ -15,7 +15,8 @@ contract SpokeInstance is Spoke {
   /// @dev During upgrade, must ensure that the new oracle is supporting existing assets on the spoke and the replaced oracle.
   /// @param oracle_ The address of the oracle.
   constructor(address oracle_) Spoke(oracle_) {
-    _disableInitializers();
+    // @audit FIXME: Remove _disableInitializers to fix echidna coverage https://github.com/crytic/echidna/issues/1116#issuecomment-3596746122
+    // _disableInitializers();
   }
 
   /// @notice Initializer.

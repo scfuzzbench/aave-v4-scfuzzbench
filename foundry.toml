@@ -3,12 +3,12 @@ src = 'src'
 test = 'tests'
 out = 'out'
 libs = ['lib']
+assertions_revert = false
 fs_permissions = [{ access = "read", path = "tests/mocks/JsonBindings.sol" }]
 solc_version = "0.8.28"
 evm_version = "cancun"
 optimizer = true
-optimizer_runs = 200
-bytecode_hash = "none"
+optimizer_runs = 50
 gas_snapshot_check = false
 gas_limit = 1099511627776
 
@@ -22,7 +22,6 @@ lint_on_build = false
 
 [profile.default.fuzz]
 runs = 1000
-seed = "0x640"
 
 [profile.pr.fuzz]
 runs = 5000
@@ -63,3 +62,15 @@ zkevm = { key = "${ETHERSCAN_API_KEY_ZKEVM}", chainId = 1101 }
 gnosis = { key = "${ETHERSCAN_API_KEY_GNOSIS}", chainId = 100 }
 bnb = { key = "${ETHERSCAN_API_KEY_BNB}", chainId = 56 }
 celo = { key = "${ETHERSCAN_API_KEY_CELO}", chainId = 42220 }
+
+[invariant]
+runs = 500000000
+depth = 100
+include_storage = true
+show_solidity = true
+show_metrics = true
+fail_on_revert = false
+corpus_dir = "corpus/foundry"
+corpus_gzip = false
+max_time_delay = 604800
+max_block_delay = 60480
