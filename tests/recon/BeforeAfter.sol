@@ -21,6 +21,11 @@ abstract contract BeforeAfter is Setup {
     Vars internal _before;
     Vars internal _after;
 
+    // Operation performed by the handler currently executing. Handlers set this in their
+    // body (between __before and __after), and __snapshot copies it into the Vars — writing
+    // _after.operation directly from a handler body would be wiped by __after's snapshot.
+    Operation internal _currentOperation;
+
     mapping(uint256 assetId => uint256 maxDrawnIndexSeen) internal ghost_maxDrawnIndexSeen;
     mapping(uint256 assetId => uint256 maxSupplySharePriceAssetsSeen) internal ghost_maxSupplySharePriceAssetsSeen;
     mapping(uint256 assetId => uint256 maxSupplySharePriceSharesSeen) internal ghost_maxSupplySharePriceSharesSeen;
@@ -45,6 +50,7 @@ abstract contract BeforeAfter is Setup {
     }
 
     function __before() internal {
+        _currentOperation = Operation.None;
         __snapshot(_before);
     }
 
@@ -54,7 +60,7 @@ abstract contract BeforeAfter is Setup {
 
     function __snapshot(Vars storage vars) internal {
         vars.isAnyUserLiquidatable = false;
-        vars.operation = Operation.None;
+        vars.operation = _currentOperation;
 
         address[] memory actors = _getActors();
         for(uint256 i = 0; i < actors.length; i++) {

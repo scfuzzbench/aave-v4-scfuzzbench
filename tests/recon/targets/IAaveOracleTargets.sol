@@ -45,7 +45,7 @@ abstract contract IAaveOracleTargets is
             new MockPriceFeed(oracle.DECIMALS(), oracle.DESCRIPTION(), price)
         );
         iSpoke.updateReservePriceSource(reserveId, mockPriceFeed);
-        _after.operation = Operation.SetPrice;
+        _currentOperation = Operation.SetPrice;
     }
 
     function _getOriginalPrice(uint256 reserveId) private returns (uint256 originalPrice) {
