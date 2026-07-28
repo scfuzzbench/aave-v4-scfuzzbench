@@ -101,7 +101,6 @@ abstract contract ISpokeTargets is BaseTargetFunctions, Properties {
                     || bytes4(err) == IAaveOracle.InvalidPrice.selector,
                 ASSERTION_LIQUIDATION_CALL_DOS
             );
-            require(false);
         }
     }
 
@@ -155,7 +154,6 @@ abstract contract ISpokeTargets is BaseTargetFunctions, Properties {
                     || bytes4(err) == IAaveOracle.InvalidPrice.selector,
                 ASSERTION_REPAY_DOS
             );
-            require(false);
         }
     }
 
@@ -221,7 +219,6 @@ abstract contract ISpokeTargets is BaseTargetFunctions, Properties {
                     || bytes4(err) == IHub.SpokePaused.selector,
                 ASSERTION_SUPPLY_DOS
             );
-            require(false);
         }
     }
 
@@ -305,7 +302,6 @@ abstract contract ISpokeTargets is BaseTargetFunctions, Properties {
                     || bytes4(err) == Ownable.OwnableUnauthorizedAccount.selector,
                 ASSERTION_WITHDRAW_DOS
             );
-            require(false);
         }
     }
 }
